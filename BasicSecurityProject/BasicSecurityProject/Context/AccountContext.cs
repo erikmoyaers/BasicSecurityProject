@@ -9,13 +9,16 @@ namespace BasicSecurityProject.Context
 {
     public class AccountContext : DbContext
     {
+        public AccountContext()
+        {
+        }
 
         public AccountContext(DbContextOptions options) : base(options)
         {
 
         }
 
-        private DbSet<Account> Accounts { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,5 +28,6 @@ namespace BasicSecurityProject.Context
                     new Account() { ID = 3, Username = "Mukesh", Hash = "E2674AA2162A3225B5B51DD0A796C32F17679642593347BD6A24EB90EEBF912B", Salt = "ef6e5f49d8ssd8v" });
                 
         }
+        
     }
 }

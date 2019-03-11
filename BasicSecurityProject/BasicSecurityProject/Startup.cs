@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BasicSecurityProject.Context;
+using BasicSecurityProject.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,10 @@ namespace BasicSecurityProject
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var context = new AccountContext();
+            
+
+            var accountRepository = new AccountRepository(context);
         }
 
         public IConfiguration Configuration { get; }
@@ -26,8 +31,11 @@ namespace BasicSecurityProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddMvc();
             services.AddDbContext<AccountContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +60,7 @@ namespace BasicSecurityProject
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Account}/{action=Index}/{id?}");
             });
         }
     }
