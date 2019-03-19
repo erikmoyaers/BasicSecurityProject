@@ -19,10 +19,18 @@ namespace BasicSecurityProject.Controllers
             
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var model = _accountRepository.GetAll();
             return View(model);
         }
+        [HttpPost]
+        public IActionResult View()
+        {
+            
+            return View();
+        }
+
     }
 }

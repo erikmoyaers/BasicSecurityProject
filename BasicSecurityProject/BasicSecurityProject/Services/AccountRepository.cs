@@ -22,5 +22,18 @@ namespace BasicSecurityProject.Services
             
             return _context.Accounts.ToList(); ;
         }
+
+        public Account FindById(int id)
+        {
+            return _context.Accounts.FirstOrDefault(a => a.ID == id);
+        }
+
+        public void CreateAccount(Account account)
+        {
+            _context.Accounts.Add(account);
+            _context.SaveChanges();
+        }
+
+
     }
 }
