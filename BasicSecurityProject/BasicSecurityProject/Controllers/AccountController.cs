@@ -28,30 +28,33 @@ namespace BasicSecurityProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(LoginViewModel loginCredentials)
+        public IActionResult Index(LoginViewModel model)
         {
             if(ModelState.IsValid)
             {
-                if(_accountRepository.GetAll().Any(x => x.Username == loginCredentials.Username))
+                if(_accountRepository.GetAll().Any(x => x.Username == model.Username))
                 {
-                    var accountToLoginTo = _accountRepository.GetAll().First(x => x.Username == loginCredentials.Username);
-                    if (accountToLoginTo.Hash.Equals(_saltGenerator.getHashOfPasswordAndSalt(loginCredentials.Password, accountToLoginTo.Salt)))
+                    var accountToLoginTo = _accountRepository.GetAll().First(x => x.Username == model.Username);
+                    if (accountToLoginTo.Hash.Equals(_saltGenerator.getHashOfPasswordAndSalt(model.Password, accountToLoginTo.Salt)))
                     {
-                        return RedirectToAction(nameof(EncryptOrDecryptChoice), accountToLoginTo.ID);
+                        return RedirectToAction(nameof(EncryptOrDecryptChoice), new { id = accountToLoginTo.ID });
                     }
                     else
                     {
-                        return View("Wrong password");
+                        ModelState.AddModelError(String.Empty, "Wrong password/account combination");
+                        return View(model);
                     }
                 }
                 else
                 {
-                    return View();
+                    ModelState.AddModelError(String.Empty, "Wrong password/account combination");
+                    return View(model);
                 }
             }
             else
             {
-                return View();
+                ModelState.AddModelError(String.Empty, "Invalid modelstate");
+                return View(model);
             }
         }
 
@@ -63,35 +66,38 @@ namespace BasicSecurityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(AccountViewModel account)
+        public IActionResult Register(AccountViewModel model)
         {
             if(ModelState.IsValid)
             {
-                if(_accountRepository.GetAll().Any(x => x.Username == account.Username))
+                if(!_accountRepository.GetAll().Any(x => x.Username == model.Username))
                 {
-                    if (!account.Password.Equals(account.PasswordAgain))
+                    if (model.Password.Equals(model.PasswordAgain))
                     {
                         var newAccount = new Account();
-                        newAccount.Username = account.Username;
+                        newAccount.Username = model.Username;
                         newAccount.Salt = _saltGenerator.getSalt();
-                        newAccount.Hash = _saltGenerator.getHashOfPasswordAndSalt(account.Password, newAccount.Salt);
+                        newAccount.Hash = _saltGenerator.getHashOfPasswordAndSalt(model.Password, newAccount.Salt);
                         _accountRepository.CreateAccount(newAccount);
                         return RedirectToAction(nameof(EncryptOrDecryptChoice), new { id = newAccount.ID });//potentiele fout: hoe weet die het ID ?
                     }
                     else
                     {
-                        return View();
+                        ModelState.AddModelError(String.Empty, "Passwords did not match, please try again");
+                        return View(model);
                     }
                 }
                 else
                 {
-                    return View();
+                    ModelState.AddModelError(String.Empty, "Username already taken, please try again");
+                    return View(model);
                 }
                 
             }
             else
             {
-                return View();
+                ModelState.AddModelError(String.Empty, "Invalid modelstate");
+                return View(model);
             }
         }
 
@@ -100,9 +106,14 @@ namespace BasicSecurityProject.Controllers
             var model = _accountRepository.FindById(id);
             if(model == null)
             {
-                return View("Not found"); //mss beter een of andere fancy niet gevonden pagina
+                ModelState.AddModelError(String.Empty, "returned model was null");
+                return View(model);
             }
-            return View(model);
+            else
+            {
+                return View(model);
+            }
+           
         }
 
         
