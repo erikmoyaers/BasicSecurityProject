@@ -1,27 +1,28 @@
 ﻿@{
-    ViewBag.Title = "Encrypt or decrypt";
+        ViewBag.Title = "Encrypt or decrypt";
 }
 
-<head>
-    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
-</head>
-<div class="container-fluid">
-    <div class="row align-items-center">
-        <div class="col-12">
-            <h1 class="w-25 mx-auto d-block"><u>Ik wil graag</u></h1>
-        </div>
-        <div class="col-12">
-            <form id="userInput">
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <button class="w-25 mx-auto d-block">Encrypteren</button>
+    <head>
+        <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
+    </head>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <h1 class="w-25 mx-auto d-block"><u>Ik wil graag</u></h1>
+            </div>
+            <div class="col-12">
+                <form id="userInput">
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <!--TODO: VERANDER TERUG NAAR BUTTON: probleem meerdere posts ?-->
+                            <a asp-action="Encryption" class="w-100 mx-auto d-block">Encrypteren</a>
+                        </div>
+                        <div class="col-3">
+                            <button class="w-25 mx-auto d-block">Decrypteren</button>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <button class="w-25 mx-auto d-block">Decrypteren</button>
-                    </div>
-                </div>    
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-   
+

@@ -11,6 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BasicSecurityProject.Controllers
 {
+    /*
+     * 
+     * ZEER GROTE ERROR --> MEN KAN IN URL NOG INGEVEN OP ENCRYPTORDECRYPT SCHERM!!!!!!
+     * 
+     * 
+     * 
+     */
+
     public class AccountController : Controller
     {
         private readonly IAccountRepository _accountRepository;
@@ -116,8 +124,19 @@ namespace BasicSecurityProject.Controllers
            
         }
 
-        
+        [HttpGet]
+        public IActionResult Encryption()
+        {
+            return View();
+        }
 
+        /*
+        [HttpPost]
+        public IActionResult Encryption()
+        {
+            return View();
+        }
+        */
         /*
         public IActionResult Index()
         {
