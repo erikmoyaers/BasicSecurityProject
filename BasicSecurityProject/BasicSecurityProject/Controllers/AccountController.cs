@@ -130,6 +130,12 @@ namespace BasicSecurityProject.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Decryption()
+        {
+            return View();
+        }
+
         /*
         [HttpPost]
         public IActionResult Encryption()

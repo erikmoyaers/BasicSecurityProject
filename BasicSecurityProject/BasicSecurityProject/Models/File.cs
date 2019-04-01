@@ -9,8 +9,8 @@ namespace BasicSecurityProject.Models
     public class File
     {
         public int ID { get; set; }
-        public Account FromAccount { get; set; }
-        public Account ToAccount { get; set; }
+        public String FromAccount { get; set; }
+        public String ToAccount { get; set; }
         public byte[] FileByteArray { get; set; }
         
 

@@ -1,0 +1,76 @@
+﻿@model BasicSecurityProject.ViewModel.DecryptionViewModel;
+
+@{
+    ViewBag.Title = "Decryption";
+    
+}
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
+</head>
+
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col-12">
+            <form method="post" class="w-100 mx-auto d-block">
+
+                <!--Alles wat niet geselecteerd wordt, wordt aangemaakt, behalve de message-->
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="AesKey" class="w-100 mx-auto d-block">Select AES key</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="AesKey" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="PublicKey" class="w-100 mx-auto d-block">Select public keypair</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="PublicKey" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="PrivateKey" class="w-100 mx-auto d-block">Select private keypair</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="PrivateKey" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="File" class="w-100 mx-auto d-block">Select a file to send</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="File" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="FromUserUsername" class="w-100 mx-auto d-block">User who sent the files</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="FromUserUsername" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <button asp-action="EncryptOrDecryptChoice" class="w-100 mx-auto d-block" type="submit">send</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
