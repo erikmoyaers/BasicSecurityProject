@@ -12,7 +12,25 @@
         <div class="col-12">
             <form method="post" enctype="multipart/form-data" class="w-100 mx-auto d-block">
 
-                
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="AesKey" class="w-100 mx-auto d-block">Select AES key</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="AesKey" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="Iv" class="w-100 mx-auto d-block">Select IV for AES</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="Iv" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
 
                 <div class="row align-items-center">
                     <div class="offset-3 col-3">

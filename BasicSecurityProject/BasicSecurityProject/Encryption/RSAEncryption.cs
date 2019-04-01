@@ -11,8 +11,6 @@ namespace Hybrid
 {
     public class RSAEncryption
     {
-
-
         //sleutels toewijzen
         public void GenerateKeysInFile(string folder, string publicKeyName, string privateKeyName)
         {
@@ -29,8 +27,8 @@ namespace Hybrid
                 var publicKeyFile = File.Create(folder + "/" + publicKeyName);
                 publicKeyFile.Close();
                 RSAParameters publicKey = rsa.ExportParameters(false);
-                File.WriteAllText(folder + "/" + privateKeyName, rsa.ExportParameters(true));
-                File.WriteAllText(folder + "/" + publicKeyName, rsa.ExportParameters(false));
+                File.WriteAllText(folder + "/" + privateKeyName, convertKeyToString(rsa.ExportParameters(true)));
+                File.WriteAllText(folder + "/" + publicKeyName, convertKeyToString(rsa.ExportParameters(false)));
                 
             }
         }
@@ -97,7 +95,7 @@ namespace Hybrid
         }
 
         //https://stackoverflow.com/questions/17128038/c-sharp-rsa-encryption-decryption-with-transmission
-        public string convertKeyToString(RSAParameters key)
+        public static string convertKeyToString(RSAParameters key)
         {
             //we need some buffer
             var stringWriter = new StringWriter();
@@ -106,18 +104,16 @@ namespace Hybrid
             //serialize the key into the stream
             serializer.Serialize(stringWriter, key);
             //get the string from the stream
-            stringWriter.Close();
             return stringWriter.ToString();
         }
 
-        public RSAParameters convertStringToKey(string keyAsString)
+        public static RSAParameters convertStringToKey(string keyAsString)
         {
             //get a stream from the string
             var stringReader = new StringReader(keyAsString);
             //we need a deserializer
             var serializer = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
             //get the object back from the stream
-            stringReader.Close();
             return (RSAParameters)serializer.Deserialize(stringReader);
         }
 

@@ -10,12 +10,8 @@ namespace BasicSecurityProject.ViewModel
 {
     public class EncryptionViewModel
     {
-        /*
-        public FormFile AesKey { get; set; }
-        public FormFile Iv { get; set; }
-        public FormFile PrivateKey { get; set; }
-        public FormFile PublicKey { get; set; }
-        */
+        public IFormFile AesKey { get; set; }
+        public IFormFile Iv { get; set; }
         public IFormFile File { get; set; }
         public string ToUserUsername { get; set; }
     }

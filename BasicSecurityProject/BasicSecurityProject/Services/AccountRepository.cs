@@ -34,6 +34,17 @@ namespace BasicSecurityProject.Services
             _context.SaveChanges();
         }
 
+        /*
+        public void SetPrivateKey(int userId, byte[] privateKey)
+        {
+            _context.Accounts.First(a => a.ID == userId).PrivateKey = privateKey;
+        }
+
+        public void SetPublicKey(int userId, byte[] publicKey)
+        {
+            _context.Accounts.First(a => a.ID == userId).PrivateKey = publicKey;
+        }
+        */
 
     }
 }

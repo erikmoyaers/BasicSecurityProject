@@ -30,6 +30,7 @@ namespace BasicSecurityProject.Controllers
         //TODO: in constructor bijvlammen
         private readonly AesEncryption _aes = new AesEncryption();
         private readonly RSAEncryption _rsa = new RSAEncryption();
+        private readonly SHA256 _sha256 = SHA256.Create();
 
         private Account _fromAccount;
 
@@ -56,7 +57,6 @@ namespace BasicSecurityProject.Controllers
                     if (accountToLoginTo.Hash.Equals(_saltGenerator.getHashOfPasswordAndSalt(model.Password, accountToLoginTo.Salt)))
                     {
                         _fromAccount = _accountRepository.FindById(accountToLoginTo.ID);
-                        System.IO.File.AppendAllText("log.txt", "POST: ingelogd in index" + Environment.NewLine);
                         return RedirectToAction(nameof(EncryptOrDecryptChoice));
                     }
                     else
@@ -124,14 +124,12 @@ namespace BasicSecurityProject.Controllers
 
         public IActionResult EncryptOrDecryptChoice()
         {
-            System.IO.File.AppendAllText("log.txt", "GET: encrypt of decrypt page laten zien" + Environment.NewLine);
             return View();
         }
 
         [HttpGet]
         public IActionResult Encryption()
         {
-            System.IO.File.AppendAllText("log.txt", "GET: encrypt laten zien" + Environment.NewLine);
             return View();
         }
         
@@ -139,12 +137,12 @@ namespace BasicSecurityProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Encryption(EncryptionViewModel model)
         {
-            System.IO.File.AppendAllText("log.txt", "POST: post binnengeraakt" + Environment.NewLine);
             if (ModelState.IsValid)
             {
-                System.IO.File.AppendAllText("log.txt", "POST: modelstate is valid" + Environment.NewLine);
-                //bij encrypteren
+                //we zoeken de user naar wie het verstuurd meot worden
                 Account toAccount = _accountRepository.GetAll().First(x => x.Username == model.ToUserUsername);
+
+                //****de sleutels worden gegenereerd in een tekstdocument -> het XML formaat wordt gebruikt****
                 //programma genereert een public en private key voor alice (fromAccount)
                 _rsa.GenerateKeysInFile("GeneratedKeys", "Public_A", "Private_A");
                 //programma genereert een public en private key voor bob (toUser)
@@ -152,26 +150,49 @@ namespace BasicSecurityProject.Controllers
 
                 //programma vraagt input + gebruikt symmetric key om dit te versleutelen
                 //OUTPUT: File_1
-                _aes.Key = Encoding.ASCII.GetBytes("r5u8x/A?D*G-KaPdSgVkYp3s6v9y$B&E"); //LETTERLIJK HARDGECODEERD --> INLADEN + 32 tekens = 256 bits
-                _aes.Iv = Encoding.ASCII.GetBytes("p3s5v8y/B?E(H+Mb"); //LETTERLIJK HARDGECODEERD --> INLADEN + 16 tekens = 128 bits
-
-                System.IO.File.AppendAllText("log.txt", "POST: buiten stream" + Environment.NewLine);
+                //1)inladen van de key en de iv
                 using (var memoryStream = new MemoryStream())
                 {
-                    System.IO.File.AppendAllText("log.txt", "POST: eerste lijn in stream" + Environment.NewLine);
+                    await model.AesKey.CopyToAsync(memoryStream);
+                    _aes.Key = memoryStream.ToArray();
+                }
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.Iv.CopyToAsync(memoryStream);
+                    _aes.Iv = memoryStream.ToArray();
+                }
+                /*  voorbeeldcode toont dat de IV van een key altijd de helft zo groot is
+                _aes.Key = Encoding.ASCII.GetBytes("r5u8x/A?D*G-KaPdSgVkYp3s6v9y$B&E"); //LETTERLIJK HARDGECODEERD --> INLADEN + 32 tekens = 256 bits
+                _aes.Iv = Encoding.ASCII.GetBytes("p3s5v8y/B?E(H+Mb"); //LETTERLIJK HARDGECODEERD --> INLADEN + 16 tekens = 128 bits
+                */
+                //2) wegscrijven file1
+                using (var memoryStream = new MemoryStream())
+                {
                     await model.File.CopyToAsync(memoryStream);
-                    System.IO.File.AppendAllText("log.txt", "POST: tweede lijn in stream" + Environment.NewLine);
                     _aes.Encrypt("GeneratedFiles", "File_1", memoryStream.ToArray());
-                    System.IO.File.AppendAllText("log.txt", "POST: gedaan met stream" + Environment.NewLine);
                 }
 
                 //programma encrypteerd de symmetric key met public key v bob
                 //OUTPUT: File_2
-                
-                //_rsa.EncryptData(_aes.Key, toAccount.PublicKey);
-                
-                System.IO.File.AppendAllText("log.txt", "POST: _aes versleuteling gelukt" + Environment.NewLine);
-                //return View(model);
+                //****de xml string wordt omgezet naar een bytearray**** --> WAAROM ? op stackoverflow wordt aangeraden keys als bytearrays op te slaan
+                //****de bytearray wordt omgezet naar een string**** --> WAAROM ? ik heb geen idee hoe een bytearray direct naar RSAparameters om te zetten
+                //****deze string kan omgezet worden naar een key**** --> WAAROM ? zie hierboven
+                //****met deze key kan er geencrypteerd worden****
+                //****de encryptie geeft een bytearray terug die opgeslagen wordt****
+                System.IO.File.WriteAllBytes("GeneratedFiles/File_2", _rsa.EncryptData(_aes.Key, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Public_B")))));
+
+                //programma maakt een hash van het oorspronkelijk boodschap + encrypteerd met de private key van alice + saved
+                //OUTPUT: File_3
+
+                byte[] hashedOriginalMessage;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.File.CopyToAsync(memoryStream);
+                    hashedOriginalMessage = _sha256.ComputeHash(memoryStream.ToArray());
+                }
+                //hetzelfde wordt gedaan als bij die block comments bij file2
+                System.IO.File.WriteAllBytes("GeneratedFiles/File_3", _rsa.SignData(hashedOriginalMessage, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Private_A")))));
+
                 return RedirectToAction(nameof(EncryptOrDecryptChoice));
             }
             else
@@ -183,7 +204,6 @@ namespace BasicSecurityProject.Controllers
 
         public IActionResult test()
         {
-            System.IO.File.AppendAllText("log.txt", "GET: test pagina geentered" + Environment.NewLine);
             return View();
         }
 
