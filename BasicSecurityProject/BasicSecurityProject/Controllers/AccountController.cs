@@ -207,6 +207,10 @@ namespace BasicSecurityProject.Controllers
             return View();
         }
 
+        public IActionResult Decryption()
+        {
+            return View();
+        }
 
 
         /*
@@ -230,6 +234,7 @@ namespace BasicSecurityProject.Controllers
             return View();
         }
         */
+
 
     }
 }
