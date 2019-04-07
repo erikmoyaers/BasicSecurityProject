@@ -1,5 +1,4 @@
-﻿@model BasicSecurityProject.ViewModel.AccountViewModel
-
+﻿@model BasicSecurityProject.ViewModel.RegisterViewModel
 @{
     ViewBag.Title = "Register";
 }
@@ -28,7 +27,7 @@
                 <!--nog niet ingesteld voor binding, paswoord mag niet opgeslagen worden-->
                 <div class="row align-items-center">
                     <div class="offset-3 col-3">
-                        <label asp-for="Password" class="w-100 mx-auto d-block">Wachtwoord</label>
+                        <label asp-for="Password" class="w-100 mx-auto d-block">password</label>
                     </div>
                     <div class="col-3">
                         <input asp-for="Password" class="w-100 mx-auto d-block" type="text">
@@ -38,12 +37,42 @@
 
                 <div class="row align-items-center">
                     <div class="offset-3 col-3">
-                        <label asp-for="PasswordAgain" class="w-100 mx-auto d-block">Bevestig wachtwoord</label>
+                        <label asp-for="PasswordAgain" class="w-100 mx-auto d-block">confirm password</label>
                     </div>
                     <div class="col-3">
                         <input asp-for="PasswordAgain" class="w-100 mx-auto d-block" type="text">
                     </div>
                     <span asp-validation-for="PasswordAgain"></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="PathToSaveKeysTo" class="w-100 mx-auto d-block">Enter path to save keys to</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="PathToSaveKeysTo" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span asp-validation-for="PathToSaveKeysTo"></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="PublicKeyName" class="w-100 mx-auto d-block">Enter public key name</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="PublicKeyName" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span asp-validation-for="PublicKeyName"></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="PrivateKeyName" class="w-100 mx-auto d-block">Enter private key name</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="PrivateKeyName" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span asp-validation-for="PrivateKeyName"></span>
                 </div>
 
                 <div class="row align-items-center">

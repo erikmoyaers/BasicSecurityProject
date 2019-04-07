@@ -1,13 +1,15 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
 
 namespace BasicSecurityProject.ViewModel
 {
     public class DecryptionViewModel
     {
-        public byte[] AesKey { get; set; }
-        public RSAParameters PrivateKey { get; set; }
-        public RSAParameters PublicKey { get; set; }
-        public byte[] File { get; set; }
+        public IFormFile File_1 { get; set; }
+        public IFormFile File_2 { get; set; }
+        public IFormFile File_2_IV { get; set; }
+        public IFormFile File_3 { get; set; }
+        public IFormFile PrivateKey { get; set; }
         public string FromUserUsername { get; set; }
     }
 }

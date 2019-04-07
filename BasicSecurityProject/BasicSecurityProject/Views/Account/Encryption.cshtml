@@ -34,6 +34,16 @@
 
                 <div class="row align-items-center">
                     <div class="offset-3 col-3">
+                        <label asp-for="PrivateKey" class="w-100 mx-auto d-block">Select private key</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="PrivateKey" class="w-100 mx-auto d-block" type="file">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
                         <label asp-for="File" class="w-100 mx-auto d-block">Select a file to send</label>
                     </div>
                     <div class="col-3">
@@ -48,6 +58,36 @@
                     </div>
                     <div class="col-3">
                         <input asp-for="ToUserUsername" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="FolderToSaveFile1" class="w-100 mx-auto d-block">Select where to save file1</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="FolderToSaveFile1" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="FolderToSaveFile2" class="w-100 mx-auto d-block">Select where to save file2</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="FolderToSaveFile2" class="w-100 mx-auto d-block" type="text">
+                    </div>
+                    <span></span>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="offset-3 col-3">
+                        <label asp-for="FolderToSaveFile3" class="w-100 mx-auto d-block">Select where to save file3</label>
+                    </div>
+                    <div class="col-3">
+                        <input asp-for="FolderToSaveFile3" class="w-100 mx-auto d-block" type="text">
                     </div>
                     <span></span>
                 </div>

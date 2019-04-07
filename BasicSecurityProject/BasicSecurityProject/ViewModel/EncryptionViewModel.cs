@@ -12,7 +12,11 @@ namespace BasicSecurityProject.ViewModel
     {
         public IFormFile AesKey { get; set; }
         public IFormFile Iv { get; set; }
+        public IFormFile PrivateKey { get; set; }
         public IFormFile File { get; set; }
         public string ToUserUsername { get; set; }
+        public string FolderToSaveFile1 { get; set; }
+        public string FolderToSaveFile2 { get; set; }
+        public string FolderToSaveFile3 { get; set; }
     }
 }

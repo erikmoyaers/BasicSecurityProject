@@ -23,9 +23,15 @@ namespace BasicSecurityProject.Services
             return _context.Accounts.ToList(); ;
         }
 
+        //TODO: klopt first here ?
         public Account FindById(int id)
         {
-            return _context.Accounts.FirstOrDefault(a => a.ID == id);
+            return _context.Accounts.First(a => a.ID == id);
+        }
+
+        public Account FindByName(string name)
+        {
+            return _context.Accounts.First(a => a.Username.Equals(name));
         }
 
         public void CreateAccount(Account account)
@@ -33,18 +39,5 @@ namespace BasicSecurityProject.Services
             _context.Accounts.Add(account);
             _context.SaveChanges();
         }
-
-        /*
-        public void SetPrivateKey(int userId, byte[] privateKey)
-        {
-            _context.Accounts.First(a => a.ID == userId).PrivateKey = privateKey;
-        }
-
-        public void SetPublicKey(int userId, byte[] publicKey)
-        {
-            _context.Accounts.First(a => a.ID == userId).PrivateKey = publicKey;
-        }
-        */
-
     }
 }
