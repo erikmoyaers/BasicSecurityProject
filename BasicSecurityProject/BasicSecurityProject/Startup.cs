@@ -54,7 +54,7 @@ namespace BasicSecurityProject
             }
 
             app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
