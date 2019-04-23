@@ -20,9 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Encryption\" />
-    <Folder Include="GeneratedKeys\" />
-    <Folder Include="dummyFile\" />
-    <Folder Include="GeneratedFiles\" />
+    <Folder Include="Keys\" />
+    <Folder Include="Files\" />
   </ItemGroup>
 
 </Project>

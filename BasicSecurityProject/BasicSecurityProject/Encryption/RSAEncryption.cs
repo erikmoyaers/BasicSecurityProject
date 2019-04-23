@@ -18,8 +18,6 @@ namespace Hybrid
             {
                 rsa.PersistKeyInCsp = false; //--> we willen de key container niet gebruiken
 
-                //TODO !!! SLEUTELS FATSOENLIJK NAAR STRING !!!!
-
                 var privateKeyFile = File.Create(folder + "/" + privateKeyName);
                 privateKeyFile.Close();
                 RSAParameters privateKey = rsa.ExportParameters(true);
@@ -29,7 +27,6 @@ namespace Hybrid
                 RSAParameters publicKey = rsa.ExportParameters(false);
                 File.WriteAllText(folder + "/" + privateKeyName, convertKeyToString(rsa.ExportParameters(true)));
                 File.WriteAllText(folder + "/" + publicKeyName, convertKeyToString(rsa.ExportParameters(false)));
-                
             }
         }
 
@@ -59,7 +56,8 @@ namespace Hybrid
                 rsa.PersistKeyInCsp = false;
 
                 rsa.ImportParameters(privateKey);
-                plain = rsa.Decrypt(dataToDecrypt, false); // alweer dat "extra randomness" element
+                plain = 
+                    rsa.Decrypt(dataToDecrypt, false); // alweer dat "extra randomness" element
             }
 
             return plain;

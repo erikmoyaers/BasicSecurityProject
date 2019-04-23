@@ -1,4 +1,4 @@
-﻿@model BasicSecurityProject.ViewModel.EncryptionViewModel;
+@model BasicSecurityProject.ViewModel.EncryptionViewModel;
 @{
     ViewBag.Title = "Encryption";
 }
@@ -7,59 +7,104 @@
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
 </head>
 
-<div class="container-fluid">
-    <div class="row align-items-center">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data" class="w-100 mx-auto d-block">
+<body class="jumbotron vertical-center w-100 bg-white">
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="AesKey" class="w-100 mx-auto d-block">Select AES key</label>
-                    </div>
-                    <div class="col-3">
-                        <input asp-for="AesKey" class="w-100 mx-auto d-block" type="file">
-                    </div>
-                    <span></span>
-                </div>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="jumbotron vertical-center w-100 bg-white">
+                <h1 class="text-center display-1 bg-white">Encrypteren</h1>
+            </div>
+            <div class="col-12">
+                <form method="post" enctype="multipart/form-data" class="w-100 mx-auto d-block">
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="Iv" class="w-100 mx-auto d-block">Select IV for AES</label>
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="AesKey" class="text-center w-100 mx-auto d-block">Select AES key</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="AesKey" class="w-100 mx-auto d-block" type="file">
+                        </div>
+                        <span></span>
                     </div>
-                    <div class="col-3">
-                        <input asp-for="Iv" class="w-100 mx-auto d-block" type="file">
-                    </div>
-                    <span></span>
-                </div>
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="File" class="w-100 mx-auto d-block">Select a file to send</label>
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="Iv" class="text-center w-100 mx-auto d-block">Select IV for AES</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="Iv" class="w-100 mx-auto d-block" type="file">
+                        </div>
+                        <span></span>
                     </div>
-                    <div class="col-3">
-                        <input asp-for="File" class="w-100 mx-auto d-block" type="file">
-                    </div>
-                    <span></span>
-                </div>
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="ToUserUsername" class="w-100 mx-auto d-block">User to send to</label>
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="PrivateKey" class="text-center w-100 mx-auto d-block">Select private key</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="PrivateKey" class="w-100 mx-auto d-block" type="file">
+                        </div>
+                        <span></span>
                     </div>
-                    <div class="col-3">
-                        <input asp-for="ToUserUsername" class="w-100 mx-auto d-block" type="text">
-                    </div>
-                    <span></span>
-                </div>
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <button class="w-100 mx-auto d-block" type="submit">Send</button>
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="File" class="text-center w-100 mx-auto d-block">Select a file to send</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="File" class="w-100 mx-auto d-block" type="file">
+                        </div>
+                        <span></span>
                     </div>
-                </div>
-            </form>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="ToUserUsername" class="text-center w-100 mx-auto d-block">User to send to</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="ToUserUsername" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="FolderToSaveFile1" class="text-center w-100 mx-auto d-block">Select where to save file1</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="FolderToSaveFile1" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="FolderToSaveFile2" class="text-center w-100 mx-auto d-block">Select where to save file2</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="FolderToSaveFile2" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="FolderToSaveFile3" class="text-center w-100 mx-auto d-block">Select where to save file3</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="FolderToSaveFile3" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <button class="btn btn-outline-primary w-50 mx-auto d-block" type="submit">Send</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-
+</body>

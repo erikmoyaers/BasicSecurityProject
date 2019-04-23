@@ -1,5 +1,4 @@
-﻿@model BasicSecurityProject.ViewModel.AccountViewModel
-
+@model BasicSecurityProject.ViewModel.RegisterViewModel
 @{
     ViewBag.Title = "Register";
 }
@@ -8,57 +7,89 @@
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
 </head>
 
-<div class="container-fluid">
-    <div class="row align-items-center">
-        <div class="col-6 offset-3">
-            <h1 class="w-25 mx-auto d-block"><u>Registratie</u></h1>
-        </div>
-        <div class="col-12">
-            <form method="post" class="w-100 mx-auto d-block">
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="Username" class="w-100 mx-auto d-block">Username</label>
-                    </div>
-                    <div class="col-3">
-                        <input asp-for="Username" class="w-100 mx-auto d-block" type="text">
-                    </div>
-                    <span asp-validation-for="Username"></span>
-                </div>
+<body class="jumbotron vertical-center w-100 bg-white">
 
-                <!--nog niet ingesteld voor binding, paswoord mag niet opgeslagen worden-->
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="Password" class="w-100 mx-auto d-block">Wachtwoord</label>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-6 offset-3">
+                <h1 class="text-center display-1 pb-5 pb-lg-5">Registratie</h1>
+            </div>
+            <div class="col-12">
+                <form method="post" class="w-100 mx-auto d-block">
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="Username" class="text-center d-block">Username</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="Username" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span asp-validation-for="Username"></span>
                     </div>
-                    <div class="col-3">
-                        <input asp-for="Password" class="w-100 mx-auto d-block" type="text">
-                    </div>
-                    <span asp-validation-for="Password"></span>
-                </div>
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <label asp-for="PasswordAgain" class="w-100 mx-auto d-block">Bevestig wachtwoord</label>
+                    <!--nog niet ingesteld voor binding, paswoord mag niet opgeslagen worden-->
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="Password" class="text-center d-block">password</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="Password" class="w-100 mx-auto d-block" type="password">
+                        </div>
+                        <span asp-validation-for="Password"></span>
                     </div>
-                    <div class="col-3">
-                        <input asp-for="PasswordAgain" class="w-100 mx-auto d-block" type="text">
-                    </div>
-                    <span asp-validation-for="PasswordAgain"></span>
-                </div>
 
-                <div class="row align-items-center">
-                    <div class="offset-3 col-3">
-                        <button class="w-100 mx-auto d-block" type="submit">Registratie voltooien</button>
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="PasswordAgain" class="text-center d-block">confirm password</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="PasswordAgain" class="w-100 mx-auto d-block" type="password">
+                        </div>
+                        <span asp-validation-for="PasswordAgain"></span>
                     </div>
-                    <div class="col-3">
-                        <a asp-action="Index" class="w-100 mx-auto d-block">Terug naar inlogscherm</a>
-                    </div>
-                </div>
 
-            </form>
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="PathToSaveKeysTo" class="text-center d-block">Enter path to save keys to</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="PathToSaveKeysTo" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span asp-validation-for="PathToSaveKeysTo"></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="PublicKeyName" class="text-center d-block">Enter public key name</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="PublicKeyName" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span asp-validation-for="PublicKeyName"></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="PrivateKeyName" class="text-center d-block">Enter private key name</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="PrivateKeyName" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span asp-validation-for="PrivateKeyName"></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <button class="btn btn-outline-primary w-50 mx-auto d-block" type="submit">Registratie voltooien</button>
+                        </div>
+                        <div class="col-3">
+                            <a asp-action="Index" class="text-center d-block">Terug naar inlogscherm</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 
-
+</body>
