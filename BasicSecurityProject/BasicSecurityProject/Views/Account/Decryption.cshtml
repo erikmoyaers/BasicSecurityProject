@@ -80,6 +80,36 @@
 
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
+                            <label asp-for="DecryptedFileName" class="text-center w-100 mx-auto d-block">name of decrypted file</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="DecryptedFileName" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="DecryptedFilePath" class="text-center w-100 mx-auto d-block">Path to save decrypted file to</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="DecryptedFilePath" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="DecryptedFileExtention" class="text-center w-100 mx-auto d-block">file extention of original file (without dot)</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="DecryptedFileExtention" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
                             <button class="btn btn-outline-primary w-50 mx-auto d-block" type="submit">Send</button>
                         </div>
                     </div>

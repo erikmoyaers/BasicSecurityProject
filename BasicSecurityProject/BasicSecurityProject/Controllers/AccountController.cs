@@ -192,39 +192,6 @@ namespace BasicSecurityProject.Controllers
                 }
                 signedHash = _rsa.SignData(hashedInputFile, RSAEncryption.convertStringToKey(Encoding.Default.GetString(fromUserPrivateKeyAsByteArray)));
                 System.IO.File.WriteAllBytes(model.FolderToSaveFile3 + "/File_3", signedHash);
-
-                /*
-                //decrypteren
-
-                //stap 1: aes sleutel wordt verkregen door file 2 te decrypteren met private_b
-                byte[] keyToDecrypt = System.IO.File.ReadAllBytes("GeneratedFiles/File_2");
-                byte[] ivToDecrypt = System.IO.File.ReadAllBytes("GeneratedFiles/File_2_IV");
-                byte[] keyAfterDecryption = _rsa.DecryptData(keyToDecrypt, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Private_B"))));
-                byte[] ivAfterDecryption = _rsa.DecryptData(ivToDecrypt, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Private_B"))));
-                System.IO.File.AppendAllText("log.txt", "AES originele key in hex " + byteToHex(key) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "AES originele iv in hex  " + byteToHex(iv) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "AES decrypted key in hex " + byteToHex(keyAfterDecryption) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "AES decrypted iv in hex  " + byteToHex(ivAfterDecryption) + Environment.NewLine);
-
-                //stap 2: file1 wordt gedecrypteerd met de sleutel van vorige stap
-                byte[] file1  = System.IO.File.ReadAllBytes("GeneratedFiles/File_1");
-                byte[] file1Decrypted = _aes.Decrypt(file1, keyAfterDecryption, ivAfterDecryption);
-
-                System.IO.File.AppendAllText("log.txt", "file dat gedecrypteerd moet worden " + Encoding.UTF8.GetString(file1) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "file na decryptie " + Encoding.UTF8.GetString(file1Decrypted) + Environment.NewLine);
-
-                //stap 3: hash berekenen van de originele boodschap
-                byte[] hashedDecryptedFile = _sha256.ComputeHash(file1Decrypted);
-                byte[] file3 = System.IO.File.ReadAllBytes("GeneratedFiles/File_3");
-                if(_rsa.VerifySignature(hashedDecryptedFile, file3, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Public_A")))))
-                {
-                    System.IO.File.AppendAllText("log.txt", "END");
-                }
-                else
-                {
-                    System.IO.File.AppendAllText("log.txt", "FUCK");
-                }
-                */
                 return RedirectToAction(nameof(EncryptOrDecryptChoice));
             }
             else
@@ -277,8 +244,7 @@ namespace BasicSecurityProject.Controllers
                     file1 = memoryStream.ToArray();
                 }
                 file1Decrypted = _aes.Decrypt(file1, keyAfterDecryption, ivAfterDecryption);
-                //TODO: zoek een manier om deze proper op het scherm te zetten (pop up bericht ofzo)
-                System.IO.File.AppendAllText("log.txt", "file na decryptie " + Encoding.UTF8.GetString(file1Decrypted) + Environment.NewLine);
+                System.IO.File.WriteAllBytes(model.DecryptedFilePath + "/" + model.DecryptedFileName + "." + model.DecryptedFileExtention, file1Decrypted);
 
                 //stap 3: hash berekenen van de originele boodschap
                 hashedDecryptedFile = _sha256.ComputeHash(file1Decrypted);
