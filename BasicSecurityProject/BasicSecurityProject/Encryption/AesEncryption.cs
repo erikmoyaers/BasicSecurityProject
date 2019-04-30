@@ -10,28 +10,29 @@ namespace Hybrid
 {
     public class AesEncryption
     {
-        public byte[] Key { get; set; }
-        public byte[] Iv { get; set; }
-        /*
+        
         //om encryptie sleutel te genereren
         public byte[] GenerateRandomNumber(int length)
         {
             using (var randomNumberGenerator = new RNGCryptoServiceProvider())
             {
-                var randomNumber = new byte[length];
+                var randomNumber = new byte[length-1];
                 randomNumberGenerator.GetBytes(randomNumber);
                 return randomNumber;
             }
         }
-        */
+        
 
         //de encryptie zelf
-        public void Encrypt(string folder, string fileName, byte[] dataToEncrypt)
+        public byte[] Encrypt(byte[] dataToEncrypt, byte[] key, byte[] iv)
         {
             using (var aes = new AesCryptoServiceProvider())
             {
-                aes.Key = Key;
-                aes.IV = Iv;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                aes.Key = key;
+                aes.IV = iv;
 
                 using (var memoryStream = new MemoryStream())
                 {
@@ -39,7 +40,8 @@ namespace Hybrid
                     cryptoStream.Write(dataToEncrypt, 0, dataToEncrypt.Length);
                     cryptoStream.FlushFinalBlock();
 
-                    File.WriteAllText(folder + "/" + fileName, Encoding.Default.GetString(memoryStream.ToArray()));
+                    return memoryStream.ToArray();
+                    //File.WriteAllText(folder + "/" + fileName, Encoding.UTF8.GetString(memoryStream.ToArray()));
                 }
             }
         }
@@ -49,6 +51,9 @@ namespace Hybrid
         {
             using (var aes = new AesCryptoServiceProvider())
             {
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
                 aes.Key = key;
                 aes.IV = iv;
 

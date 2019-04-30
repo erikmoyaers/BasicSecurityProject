@@ -12,8 +12,8 @@ namespace BasicSecurityProject.Models
         public String Username { get; set; }
         public String Hash { get; set; }
         public String Salt { get; set; }
-        /*
         public byte[] PublicKey { get; set; }
+        /*
         public byte[] PrivateKey { get; set; }
         */
     }

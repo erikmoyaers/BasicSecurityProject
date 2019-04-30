@@ -14,15 +14,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="Encryption\" />
-    <Folder Include="GeneratedKeys\" />
-    <Folder Include="dummyFile\" />
-    <Folder Include="GeneratedFiles\" />
+    <Folder Include="Keys\" />
+    <Folder Include="Files\" />
   </ItemGroup>
 
 </Project>

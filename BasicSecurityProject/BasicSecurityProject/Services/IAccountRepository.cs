@@ -10,10 +10,8 @@ namespace BasicSecurityProject.Services
     {
         IEnumerable<Account> GetAll();
         Account FindById(int id);
+        Account FindByName(string name);
         void CreateAccount(Account account);
-        /*
-        void SetPrivateKey(int userId, byte[] privateKey);
-        void SetPublicKey(int userId, byte[] publicKey);
-        */
+        
     }
 }

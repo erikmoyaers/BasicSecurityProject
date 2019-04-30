@@ -1,0 +1,26 @@
+@{
+    ViewBag.Title = "Steganography";
+}
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
+</head>
+<div class="container-fluid">
+    <div class="jumbotron vertical-center w-100 bg-white">
+        <div class="col-12">
+            <h1 class="text-center display-1 bg-white pb-5 pb-lg-5">Steganografie</h1>
+        </div>
+        <div class="col-12">
+            <form id="userInput">
+                <div class="row align-items-center">
+                    <div class="col-sm">
+                        <a asp-action="SteganographyEncryption" class="btn btn-outline-primary w-75 mx-auto d-block">Encrypteren</a>
+                    </div>
+                    <div class="col-sm">
+                        <a asp-action="SteganographyDecryption" class="btn btn-outline-primary w-75 mx-auto d-block">Decrypteren</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
