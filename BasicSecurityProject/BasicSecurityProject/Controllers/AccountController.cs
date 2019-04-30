@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using BasicSecurityProject.Encryption;
 using BasicSecurityProject.Models;
 using BasicSecurityProject.Services;
 using BasicSecurityProject.ViewModel;
@@ -31,6 +33,7 @@ namespace BasicSecurityProject.Controllers
         private readonly AesEncryption _aes = new AesEncryption();
         private readonly RSAEncryption _rsa = new RSAEncryption();
         private readonly SHA256 _sha256 = SHA256.Create();
+        private readonly Steganography _steganography = new Steganography();
 
         public AccountController(IAccountRepository accountRepository)
         {
@@ -319,10 +322,54 @@ namespace BasicSecurityProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult Steganography()
+        public IActionResult SteganographyChoice()
         {
             return View();
         }
 
+
+        [HttpGet]
+        public IActionResult SteganographyEncryption()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SteganographyEncryption(SteganographyEncryptionViewModel model)
+        {
+            byte[] imageAsByteArray;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.ImageToEncryptWith.CopyToAsync(memoryStream);
+                imageAsByteArray = memoryStream.ToArray();
+            }
+
+            Bitmap imageAsBitmap = _steganography.ConvertByteArrayToBitmap(imageAsByteArray);
+            _steganography.Encryption(imageAsBitmap, model.TextToEncrypt, model.SaveFilePath, model.SaveFileName);
+            return RedirectToAction(nameof(SteganographyChoice));
+        }
+
+        [HttpGet]
+        public IActionResult SteganographyDecryption()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SteganographyDecryption(SteganographyDecryptionViewModel model)
+        {
+            byte[] imageAsByteArray;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.ImageToDecrypt.CopyToAsync(memoryStream);
+                imageAsByteArray = memoryStream.ToArray();
+            }
+
+            Bitmap imageAsBitmap = _steganography.ConvertByteArrayToBitmap(imageAsByteArray);
+            _steganography.Decryption(imageAsBitmap, model.SaveFilePath, model.SaveFileName);
+            return RedirectToAction(nameof(SteganographyChoice));
+        }
     }
 }

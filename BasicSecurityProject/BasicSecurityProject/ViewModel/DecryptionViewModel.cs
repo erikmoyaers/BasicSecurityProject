@@ -11,5 +11,8 @@ namespace BasicSecurityProject.ViewModel
         public IFormFile File_3 { get; set; }
         public IFormFile PrivateKey { get; set; }
         public string FromUserUsername { get; set; }
+        public string DecryptedFileName { get; set; }
+        public string DecryptedFilePath { get; set; }
+        public string DecryptedFileExtention { get; set; }
     }
 }
