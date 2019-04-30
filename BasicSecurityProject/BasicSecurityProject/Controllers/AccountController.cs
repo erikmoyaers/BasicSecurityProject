@@ -318,5 +318,11 @@ namespace BasicSecurityProject.Controllers
             return sb.ToString();
         }
 
+        [HttpGet]
+        public IActionResult Steganography()
+        {
+            return View();
+        }
+
     }
 }
