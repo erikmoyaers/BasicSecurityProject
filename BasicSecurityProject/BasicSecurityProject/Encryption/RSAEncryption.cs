@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BasicSecurityProject.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Hybrid
 {
-    public class RSAEncryption
+    public class RSAEncryption : IRSAEncryption
     {
-        //sleutels toewijzen
+        //generate keypair in specific folder
         public void GenerateKeysInFile(string folder, string publicKeyName, string privateKeyName)
         {
             using (var rsa = new RSACryptoServiceProvider(2048))
@@ -30,7 +31,7 @@ namespace Hybrid
             }
         }
 
-        //het encrypteren zelf
+        //RSA encryption
         public byte[] EncryptData(byte[] dataToEncrypt, RSAParameters publicKey)
         {
             byte[] cipherbytes;
@@ -46,7 +47,7 @@ namespace Hybrid
             return cipherbytes;
         }
 
-        //het decrypteren
+        //RSA decryption
         public byte[] DecryptData(byte[] dataToDecrypt, RSAParameters privateKey)
         {
             byte[] plain;
@@ -63,7 +64,7 @@ namespace Hybrid
             return plain;
         }
 
-        //het handtekenen
+        //signing of data
         public byte[] SignData(byte[] hashOfDataToSign, RSAParameters privateKey)
         {
             using(var rsa = new RSACryptoServiceProvider(2048))
@@ -78,7 +79,7 @@ namespace Hybrid
             }
         }
 
-        //het verifieren van een handtekening
+        //verification of signature
         public bool VerifySignature(byte[] hashOfSignedData, byte[] signature, RSAParameters publicKey)
         {
             using(var rsa = new RSACryptoServiceProvider(2048))
@@ -92,7 +93,7 @@ namespace Hybrid
             }
         }
 
-        //https://stackoverflow.com/questions/17128038/c-sharp-rsa-encryption-decryption-with-transmission
+        //conversion of key to XML string
         public static string convertKeyToString(RSAParameters key)
         {
             //we need some buffer
@@ -105,6 +106,7 @@ namespace Hybrid
             return stringWriter.ToString();
         }
 
+        //conversion of XML string to key
         public static RSAParameters convertStringToKey(string keyAsString)
         {
             //get a stream from the string

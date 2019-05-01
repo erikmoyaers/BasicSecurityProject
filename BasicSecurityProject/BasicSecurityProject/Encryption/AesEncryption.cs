@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BasicSecurityProject.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace Hybrid
 {
-    public class AesEncryption
+    public class AesEncryption : IAesEncryption
     {
         
-        //om encryptie sleutel te genereren
+        //DEPRECATED: keys niet gegenereerd, ingelezen met IFormFile
+        /*
         public byte[] GenerateRandomNumber(int length)
         {
             using (var randomNumberGenerator = new RNGCryptoServiceProvider())
@@ -21,9 +23,9 @@ namespace Hybrid
                 return randomNumber;
             }
         }
+        */
         
-
-        //de encryptie zelf
+        //encryption
         public byte[] Encrypt(byte[] dataToEncrypt, byte[] key, byte[] iv)
         {
             using (var aes = new AesCryptoServiceProvider())
@@ -46,7 +48,7 @@ namespace Hybrid
             }
         }
 
-        //de decryptie
+        //decryption
         public byte[] Decrypt(byte[] dataToDecrypt, byte[] key, byte[] iv)
         {
             using (var aes = new AesCryptoServiceProvider())

@@ -60,7 +60,7 @@
 
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
-                            <label asp-for="PrivateKey" class="text-center w-100 mx-auto d-block">Selecteer de private key</label>
+                            <label asp-for="PrivateKey" class="text-center w-100 mx-auto d-block">Selecteer uw private key</label>
                         </div>
                         <div class="col-3">
                             <input asp-for="PrivateKey" class="w-100 mx-auto d-block" type="file">
@@ -70,10 +70,40 @@
 
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
-                            <label asp-for="FromUserUsername" class="text-center w-100 mx-auto d-block">Gebruiker die de bestanden verstuurd heeft</label>
+                            <label asp-for="FromUserUsername" class="text-center w-100 mx-auto d-block">User die de files gestuurd heeft</label>
                         </div>
                         <div class="col-3">
                             <input asp-for="FromUserUsername" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="DecryptedFileName" class="text-center w-100 mx-auto d-block">Naam om gedycrepteerd file op te slaan</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="DecryptedFileName" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="DecryptedFilePath" class="text-center w-100 mx-auto d-block">Path op gedecrypteerd file op te slaan</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="DecryptedFilePath" class="w-100 mx-auto d-block" type="text">
+                        </div>
+                        <span></span>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="offset-3 col-3">
+                            <label asp-for="DecryptedFileExtention" class="text-center w-100 mx-auto d-block">File extensie van origineel bestand (zonder punt)</label>
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="DecryptedFileExtention" class="w-100 mx-auto d-block" type="text">
                         </div>
                         <span></span>
                     </div>
