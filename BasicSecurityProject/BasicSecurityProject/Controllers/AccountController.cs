@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ using BasicSecurityProject.Services.Interfaces;
 using BasicSecurityProject.Services.Static_converters;
 using BasicSecurityProject.ViewModel;
 using Hybrid;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -44,7 +48,7 @@ namespace BasicSecurityProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(LoginViewModel model)
+        public async Task<IActionResult> Index(LoginViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -53,7 +57,27 @@ namespace BasicSecurityProject.Controllers
                     var accountToLoginTo = _accountRepository.GetAll().First(x => x.Username == model.Username);
                     if (accountToLoginTo.Hash.Equals(_saltGenerator.getHashOfPasswordAndSalt(model.Password, accountToLoginTo.Salt)))
                     {
+                        //Generate cookie
+
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, model.Username),
+                            new Claim(ClaimTypes.Role, "User"),
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(claimsIdentity);
+
+                        
+
+                        await HttpContext.SignInAsync(principal);
+
+                        //Cookie generated
+
                         return RedirectToAction(nameof(EncryptOrDecryptChoice));
+                        
+
                     }
                     else
                     {
@@ -82,7 +106,7 @@ namespace BasicSecurityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -98,7 +122,26 @@ namespace BasicSecurityProject.Controllers
                         _rsa.GenerateKeysInFile(model.PathToSaveKeysTo, model.PublicKeyName, model.PrivateKeyName);
                         newAccount.PublicKey = System.IO.File.ReadAllBytes(model.PathToSaveKeysTo + "/" + model.PublicKeyName);
                         _accountRepository.CreateAccount(newAccount);
-                        
+
+                        //Generate cookie
+
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, model.Username),
+                            new Claim(ClaimTypes.Role, "User"),
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(claimsIdentity);
+
+
+
+                        await HttpContext.SignInAsync(principal);
+
+                        //Cookie generated
+
+
                         //_fromAccount.ID = newAccount.ID;
                         return RedirectToAction(nameof(EncryptOrDecryptChoice));//potentiele fout: hoe weet die het ID ?
                     }
@@ -121,7 +164,7 @@ namespace BasicSecurityProject.Controllers
                 return View(model);
             }
         }
-
+        [Authorize]
         public IActionResult EncryptOrDecryptChoice()
         {
             return View();
@@ -337,6 +380,17 @@ namespace BasicSecurityProject.Controllers
                 return View(model);
             }
             
+        }
+        
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index","Account");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return RedirectToAction("Index", "Account");
         }
 
     }
