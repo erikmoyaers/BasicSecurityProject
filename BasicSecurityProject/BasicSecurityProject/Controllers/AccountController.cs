@@ -170,19 +170,21 @@ namespace BasicSecurityProject.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Encryption()
         {
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Decryption()
         {
             return View();
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Encryption(EncryptionViewModel model)
         {
@@ -244,6 +246,7 @@ namespace BasicSecurityProject.Controllers
             } 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Decryption(DecryptionViewModel model)
         {
@@ -317,19 +320,21 @@ namespace BasicSecurityProject.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult SteganographyChoice()
         {
             return View();
         }
 
-
+        [Authorize]
         [HttpGet]
         public IActionResult SteganographyEncryption()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SteganographyEncryption(SteganographyEncryptionViewModel model)
         {
@@ -353,12 +358,14 @@ namespace BasicSecurityProject.Controllers
             
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult SteganographyDecryption()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SteganographyDecryption(SteganographyDecryptionViewModel model)
         {
