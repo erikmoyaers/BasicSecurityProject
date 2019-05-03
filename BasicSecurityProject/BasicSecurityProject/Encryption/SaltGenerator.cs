@@ -10,14 +10,15 @@ namespace BasicSecurityProject.Services
     public class SaltGenerator : ISaltGenerator
     {
         private readonly SHA256 _sha256 = SHA256.Create();
+
+        //generate hashcode of password ans salt
         public string getHashOfPasswordAndSalt(string password, string salt)
         {
             //wordt naar hex vertaald omdat UTF8 rommel als output geeft
             return BitConverter.ToString(_sha256.ComputeHash(Encoding.UTF8.GetBytes(password + salt))).Replace("-", String.Empty);
         }
 
-
-        //https://codereview.stackexchange.com/questions/93614/salt-generation-in-c
+        //get a random salt code
         public string getSalt()
         {
             var random = new RNGCryptoServiceProvider();

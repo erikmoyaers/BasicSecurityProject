@@ -18,7 +18,7 @@
                 <form method="post" class="w-100 mx-auto d-block">
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
-                            <label asp-for="Username" class="text-center d-block">Gebruikersnaam</label>
+                            <label asp-for="Username" class="text-center d-block">Username</label>
                         </div>
                         <div class="col-3">
                             <input asp-for="Username" class="w-100 mx-auto d-block" type="text">
@@ -26,7 +26,6 @@
                         <span asp-validation-for="Username"></span>
                     </div>
 
-                    <!--nog niet ingesteld voor binding, paswoord mag niet opgeslagen worden-->
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
                             <label asp-for="Password" class="text-center d-block">Wachtwoord</label>
@@ -49,7 +48,7 @@
 
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
-                            <label asp-for="PathToSaveKeysTo" class="text-center d-block">Pad naar sleutels</label>
+                            <label asp-for="PathToSaveKeysTo" class="text-center d-block">Geef path waar sleutels op te slaan</label>
                         </div>
                         <div class="col-3">
                             <input asp-for="PathToSaveKeysTo" class="w-100 mx-auto d-block" type="text">
@@ -59,7 +58,7 @@
 
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
-                            <label asp-for="PublicKeyName" class="text-center d-block">Geef naam van de public key</label>
+                            <label asp-for="PublicKeyName" class="text-center d-block">Geef naam voor public key</label>
                         </div>
                         <div class="col-3">
                             <input asp-for="PublicKeyName" class="w-100 mx-auto d-block" type="text">
@@ -69,7 +68,7 @@
 
                     <div class="row align-items-center">
                         <div class="offset-3 col-3">
-                            <label asp-for="PrivateKeyName" class="text-center d-block">Geef naam van de private key</label>
+                            <label asp-for="PrivateKeyName" class="text-center d-block">Geef naam voor private key</label>
                         </div>
                         <div class="col-3">
                             <input asp-for="PrivateKeyName" class="w-100 mx-auto d-block" type="text">

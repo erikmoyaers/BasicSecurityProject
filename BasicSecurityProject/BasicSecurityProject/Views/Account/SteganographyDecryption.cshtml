@@ -1,4 +1,4 @@
-@model BasicSecurityProject.ViewModel.SteganographyDecryptionViewModel;
+﻿@model BasicSecurityProject.ViewModel.SteganographyDecryptionViewModel;
 @{
     ViewData["Title"] = "Steganography";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,50 +10,50 @@
 
 <body class="jumbotron vertical-center w-100 bg-white">
 
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="jumbotron vertical-center w-100 bg-white">
-                <h1 class="text-center display-1 bg-white">Steganografie</h1>
-            </div>
-            <div class="col-12">
-                <form method="post" enctype="multipart/form-data" class="w-100 mx-auto d-block">
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="jumbotron vertical-center w-100 bg-white">
+            <h1 class="text-center display-1 bg-white">Steganografie</h1>
+        </div>
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data" class="w-100 mx-auto d-block">
 
-                    <div class="row align-items-center mb-5">
-                        <div class="offset-2 col-3">
-                            <h1 class="btn btn-outline-primary w-100 mx-auto d-block">Selecteer</h1>
-                        </div>
-                        <div class="offset-2 col-3">
-                            <input asp-for="ImageToDecrypt" class="btn btn-outline-primary w-100 mx-auto d-block" type="file" />
-                        </div>
+                <div class="row align-items-center mb-5">
+                    <div class="offset-2 col-3">
+                        <h1 class="btn btn-outline-primary w-100 mx-auto d-block">Selecteer</h1>
                     </div>
+                    <div class="offset-2 col-3">
+                        <input asp-for="ImageToDecrypt" class="btn btn-outline-primary w-100 mx-auto d-block" type="file" />
+                    </div>
+                </div>
 
-                    <div class="row align-items-center mb-5">
-                        <div class="offset-2 col-3">
-                            <h1 class="btn btn-outline-primary w-100 mx-auto d-block">Pad naar bestand</h1>
-                        </div>
-                        <div class="offset-2 col-3">
-                            <input asp-for="SaveFilePath" class="btn btn-outline-primary w-100 mx-auto d-block" type="text" />
-                        </div>
+                <div class="row align-items-center mb-5">
+                    <div class="offset-2 col-3">
+                        <h1 class="btn btn-outline-primary w-100 mx-auto d-block">Pad naar bestand</h1>
                     </div>
+                    <div class="offset-2 col-3">
+                        <input asp-for="SaveFilePath" class="btn btn-outline-primary w-100 mx-auto d-block" type="text" />
+                    </div>
+                </div>
 
-                    <div class="row align-items-center mb-5">
-                        <div class="offset-2 col-3">
-                            <h1 class="btn btn-outline-primary w-100 mx-auto d-block">Bestandsnaam</h1>
-                        </div>
-                        <div class="offset-2 col-3">
-                            <input asp-for="SaveFileName" class="btn btn-outline-primary w-100 mx-auto d-block" type="text" />
-                        </div>
+                <div class="row align-items-center mb-5">
+                    <div class="offset-2 col-3">
+                        <h1 class="btn btn-outline-primary w-100 mx-auto d-block">Bestandsnaam</h1>
                     </div>
+                    <div class="offset-2 col-3">
+                        <input asp-for="SaveFileName" class="btn btn-outline-primary w-100 mx-auto d-block" type="text" />
+                    </div>
+                </div>
 
-                    <div class="row align-items-center">
-                        <div class="offset-2 col-3">
-                            <button class="btn btn-outline-primary w-100 mx-auto d-block" type="submit">Decrypteren</button>
-                        </div>
+                <div class="row align-items-center">
+                    <div class="offset-2 col-3">
+                        <button class="btn btn-outline-primary w-100 mx-auto d-block" type="submit">Decrypteren</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+<a asp-action="LogOut" style="margin-top: 30px" class="btn btn-dark w-25 mx-auto d-block">Uitloggen</a>
 
 </body>
-

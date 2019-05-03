@@ -3,41 +3,42 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BasicSecurityProject.Encryption;
 using BasicSecurityProject.Models;
 using BasicSecurityProject.Services;
+using BasicSecurityProject.Services.Interfaces;
+using BasicSecurityProject.Services.Static_converters;
 using BasicSecurityProject.ViewModel;
 using Hybrid;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 namespace BasicSecurityProject.Controllers
 {
-    /*
-     * 
-     * ZEER GROTE ERROR --> MEN KAN IN URL NOG INGEVEN OP ENCRYPTORDECRYPT SCHERM!!!!!!
-     * 
-     * 
-     * 
-     */
-
     public class AccountController : Controller
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly ISaltGenerator _saltGenerator = new SaltGenerator();
-        //TODO: in constructor bijvlammen
-        private readonly AesEncryption _aes = new AesEncryption();
-        private readonly RSAEncryption _rsa = new RSAEncryption();
+        private readonly ISaltGenerator _saltGenerator;
+        private readonly IAesEncryption _aes;
+        private readonly IRSAEncryption _rsa;
+        private readonly ISteganography _steganography;
         private readonly SHA256 _sha256 = SHA256.Create();
-        private readonly Steganography _steganography = new Steganography();
 
         public AccountController(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
+            _saltGenerator = new SaltGenerator();
+            _aes = new AesEncryption();
+            _rsa = new RSAEncryption();
+            _steganography = new Steganography();
         }
 
         [HttpGet]
@@ -47,7 +48,7 @@ namespace BasicSecurityProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(LoginViewModel model)
+        public async Task<IActionResult> Index(LoginViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -56,7 +57,27 @@ namespace BasicSecurityProject.Controllers
                     var accountToLoginTo = _accountRepository.GetAll().First(x => x.Username == model.Username);
                     if (accountToLoginTo.Hash.Equals(_saltGenerator.getHashOfPasswordAndSalt(model.Password, accountToLoginTo.Salt)))
                     {
+                        //Generate cookie
+
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, model.Username),
+                            new Claim(ClaimTypes.Role, "User"),
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(claimsIdentity);
+
+                        
+
+                        await HttpContext.SignInAsync(principal);
+
+                        //Cookie generated
+
                         return RedirectToAction(nameof(EncryptOrDecryptChoice));
+                        
+
                     }
                     else
                     {
@@ -85,7 +106,7 @@ namespace BasicSecurityProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -101,7 +122,26 @@ namespace BasicSecurityProject.Controllers
                         _rsa.GenerateKeysInFile(model.PathToSaveKeysTo, model.PublicKeyName, model.PrivateKeyName);
                         newAccount.PublicKey = System.IO.File.ReadAllBytes(model.PathToSaveKeysTo + "/" + model.PublicKeyName);
                         _accountRepository.CreateAccount(newAccount);
-                        
+
+                        //Generate cookie
+
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, model.Username),
+                            new Claim(ClaimTypes.Role, "User"),
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(claimsIdentity);
+
+
+
+                        await HttpContext.SignInAsync(principal);
+
+                        //Cookie generated
+
+
                         //_fromAccount.ID = newAccount.ID;
                         return RedirectToAction(nameof(EncryptOrDecryptChoice));//potentiele fout: hoe weet die het ID ?
                     }
@@ -124,25 +164,27 @@ namespace BasicSecurityProject.Controllers
                 return View(model);
             }
         }
-
+        [Authorize]
         public IActionResult EncryptOrDecryptChoice()
         {
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Encryption()
         {
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Decryption()
         {
             return View();
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Encryption(EncryptionViewModel model)
         {
@@ -195,48 +237,16 @@ namespace BasicSecurityProject.Controllers
                 }
                 signedHash = _rsa.SignData(hashedInputFile, RSAEncryption.convertStringToKey(Encoding.Default.GetString(fromUserPrivateKeyAsByteArray)));
                 System.IO.File.WriteAllBytes(model.FolderToSaveFile3 + "/File_3", signedHash);
-
-                /*
-                //decrypteren
-
-                //stap 1: aes sleutel wordt verkregen door file 2 te decrypteren met private_b
-                byte[] keyToDecrypt = System.IO.File.ReadAllBytes("GeneratedFiles/File_2");
-                byte[] ivToDecrypt = System.IO.File.ReadAllBytes("GeneratedFiles/File_2_IV");
-                byte[] keyAfterDecryption = _rsa.DecryptData(keyToDecrypt, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Private_B"))));
-                byte[] ivAfterDecryption = _rsa.DecryptData(ivToDecrypt, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Private_B"))));
-                System.IO.File.AppendAllText("log.txt", "AES originele key in hex " + byteToHex(key) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "AES originele iv in hex  " + byteToHex(iv) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "AES decrypted key in hex " + byteToHex(keyAfterDecryption) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "AES decrypted iv in hex  " + byteToHex(ivAfterDecryption) + Environment.NewLine);
-
-                //stap 2: file1 wordt gedecrypteerd met de sleutel van vorige stap
-                byte[] file1  = System.IO.File.ReadAllBytes("GeneratedFiles/File_1");
-                byte[] file1Decrypted = _aes.Decrypt(file1, keyAfterDecryption, ivAfterDecryption);
-
-                System.IO.File.AppendAllText("log.txt", "file dat gedecrypteerd moet worden " + Encoding.UTF8.GetString(file1) + Environment.NewLine);
-                System.IO.File.AppendAllText("log.txt", "file na decryptie " + Encoding.UTF8.GetString(file1Decrypted) + Environment.NewLine);
-
-                //stap 3: hash berekenen van de originele boodschap
-                byte[] hashedDecryptedFile = _sha256.ComputeHash(file1Decrypted);
-                byte[] file3 = System.IO.File.ReadAllBytes("GeneratedFiles/File_3");
-                if(_rsa.VerifySignature(hashedDecryptedFile, file3, RSAEncryption.convertStringToKey(Encoding.Default.GetString(System.IO.File.ReadAllBytes("GeneratedKeys/Public_A")))))
-                {
-                    System.IO.File.AppendAllText("log.txt", "END");
-                }
-                else
-                {
-                    System.IO.File.AppendAllText("log.txt", "FUCK");
-                }
-                */
                 return RedirectToAction(nameof(EncryptOrDecryptChoice));
             }
             else
             {
-                //ModelState.AddModelError(String.Empty, "returned model was null from encryption screen");
+                ModelState.AddModelError(String.Empty, "Invalid modelstate");
                 return View(model);
             } 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Decryption(DecryptionViewModel model)
         {
@@ -280,8 +290,7 @@ namespace BasicSecurityProject.Controllers
                     file1 = memoryStream.ToArray();
                 }
                 file1Decrypted = _aes.Decrypt(file1, keyAfterDecryption, ivAfterDecryption);
-                //TODO: zoek een manier om deze proper op het scherm te zetten (pop up bericht ofzo)
-                System.IO.File.AppendAllText("log.txt", "file na decryptie " + Encoding.UTF8.GetString(file1Decrypted) + Environment.NewLine);
+                System.IO.File.WriteAllBytes(model.DecryptedFilePath + "/" + model.DecryptedFileName + "." + model.DecryptedFileExtention, file1Decrypted);
 
                 //stap 3: hash berekenen van de originele boodschap
                 hashedDecryptedFile = _sha256.ComputeHash(file1Decrypted);
@@ -300,76 +309,96 @@ namespace BasicSecurityProject.Controllers
                 }
                 else
                 {
-                    //TODO: errormessage
+                    ModelState.AddModelError(String.Empty, "Signature could not be verified");
                     return View(model);
                 }
             }
             else
             {
-                //TODO: errormessage
+                ModelState.AddModelError(String.Empty, "Invalid modelstate");
                 return View(model);
             }
         }
 
-        public string byteToHex(byte[] ba)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in ba)
-            {
-                sb.AppendFormat("{0:x2}", b);
-            }
-            return sb.ToString();
-        }
-
+        [Authorize]
         [HttpGet]
         public IActionResult SteganographyChoice()
         {
             return View();
         }
 
-
+        [Authorize]
         [HttpGet]
         public IActionResult SteganographyEncryption()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SteganographyEncryption(SteganographyEncryptionViewModel model)
         {
-            byte[] imageAsByteArray;
-
-            using (var memoryStream = new MemoryStream())
+            if(ModelState.IsValid)
             {
-                await model.ImageToEncryptWith.CopyToAsync(memoryStream);
-                imageAsByteArray = memoryStream.ToArray();
+                byte[] imageAsByteArray;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.ImageToEncryptWith.CopyToAsync(memoryStream);
+                    imageAsByteArray = memoryStream.ToArray();
+                }
+                Bitmap imageAsBitmap = ByteArrayBitmapConverter.ConvertByteArrayToBitmap(imageAsByteArray);
+                _steganography.Encryption(imageAsBitmap, model.TextToEncrypt, model.SaveFilePath, model.SaveFileName);
+                return RedirectToAction(nameof(SteganographyChoice));
             }
-
-            Bitmap imageAsBitmap = _steganography.ConvertByteArrayToBitmap(imageAsByteArray);
-            _steganography.Encryption(imageAsBitmap, model.TextToEncrypt, model.SaveFilePath, model.SaveFileName);
-            return RedirectToAction(nameof(SteganographyChoice));
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Invalid modelstate");
+                return View(model);
+            }
+            
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult SteganographyDecryption()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SteganographyDecryption(SteganographyDecryptionViewModel model)
         {
-            byte[] imageAsByteArray;
-
-            using (var memoryStream = new MemoryStream())
+            if(ModelState.IsValid)
             {
-                await model.ImageToDecrypt.CopyToAsync(memoryStream);
-                imageAsByteArray = memoryStream.ToArray();
+                byte[] imageAsByteArray;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.ImageToDecrypt.CopyToAsync(memoryStream);
+                    imageAsByteArray = memoryStream.ToArray();
+                }
+                Bitmap imageAsBitmap = ByteArrayBitmapConverter.ConvertByteArrayToBitmap(imageAsByteArray);
+                _steganography.Decryption(imageAsBitmap, model.SaveFilePath, model.SaveFileName);
+                return RedirectToAction(nameof(SteganographyChoice));
             }
-
-            Bitmap imageAsBitmap = _steganography.ConvertByteArrayToBitmap(imageAsByteArray);
-            _steganography.Decryption(imageAsBitmap, model.SaveFilePath, model.SaveFileName);
-            return RedirectToAction(nameof(SteganographyChoice));
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Invalid modelstate");
+                return View(model);
+            }
+            
         }
+        
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index","Account");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return RedirectToAction("Index", "Account");
+        }
+
     }
 }

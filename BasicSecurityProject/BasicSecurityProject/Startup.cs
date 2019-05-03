@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using BasicSecurityProject.Context;
 using BasicSecurityProject.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +38,13 @@ namespace BasicSecurityProject
             services.AddMvc();
             services.AddDbContext<AccountContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
             services.AddScoped<IAccountRepository, AccountRepository>();
-            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/account/index";
+                    options.AccessDeniedPath = "/account/accessdenied";
+                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,9 +62,10 @@ namespace BasicSecurityProject
             }
 
             app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
