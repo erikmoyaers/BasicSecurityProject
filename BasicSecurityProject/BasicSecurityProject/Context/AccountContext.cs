@@ -19,7 +19,6 @@ namespace BasicSecurityProject.Context
         }
 
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<File> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -23,7 +23,6 @@ namespace BasicSecurityProject.Services
             return _context.Accounts.ToList(); ;
         }
 
-        //TODO: klopt first here ?
         public Account FindById(int id)
         {
             return _context.Accounts.First(a => a.ID == id);

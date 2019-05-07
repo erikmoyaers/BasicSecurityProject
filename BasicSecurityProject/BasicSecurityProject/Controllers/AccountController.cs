@@ -58,26 +58,17 @@ namespace BasicSecurityProject.Controllers
                     if (accountToLoginTo.Hash.Equals(_saltGenerator.getHashOfPasswordAndSalt(model.Password, accountToLoginTo.Salt)))
                     {
                         //Generate cookie
-
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, model.Username),
                             new Claim(ClaimTypes.Role, "User"),
                         };
-
                         var claimsIdentity = new ClaimsIdentity(
                             claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(claimsIdentity);
-
-                        
-
                         await HttpContext.SignInAsync(principal);
-
                         //Cookie generated
-
                         return RedirectToAction(nameof(EncryptOrDecryptChoice));
-                        
-
                     }
                     else
                     {
@@ -118,32 +109,23 @@ namespace BasicSecurityProject.Controllers
                         newAccount.Username = model.Username;
                         newAccount.Salt = _saltGenerator.getSalt();
                         newAccount.Hash = _saltGenerator.getHashOfPasswordAndSalt(model.Password, newAccount.Salt);
-                        //NIET PRAKTISCH: eerst wordt een key gesaved, dan wordt deze automatisch opgehaald
                         _rsa.GenerateKeysInFile(model.PathToSaveKeysTo, model.PublicKeyName, model.PrivateKeyName);
                         newAccount.PublicKey = System.IO.File.ReadAllBytes(model.PathToSaveKeysTo + "/" + model.PublicKeyName);
                         _accountRepository.CreateAccount(newAccount);
 
                         //Generate cookie
-
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, model.Username),
                             new Claim(ClaimTypes.Role, "User"),
                         };
-
                         var claimsIdentity = new ClaimsIdentity(
                             claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(claimsIdentity);
-
-
-
                         await HttpContext.SignInAsync(principal);
-
                         //Cookie generated
-
-
                         //_fromAccount.ID = newAccount.ID;
-                        return RedirectToAction(nameof(EncryptOrDecryptChoice));//potentiele fout: hoe weet die het ID ?
+                        return RedirectToAction(nameof(EncryptOrDecryptChoice));
                     }
                     else
                     {

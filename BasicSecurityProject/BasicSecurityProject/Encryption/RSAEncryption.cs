@@ -72,7 +72,7 @@ namespace Hybrid
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(privateKey);
 
-                var rsaFormatter = new RSAPKCS1SignatureFormatter(rsa); //waarvoor dient deze klasse ????
+                var rsaFormatter = new RSAPKCS1SignatureFormatter(rsa);
                 rsaFormatter.SetHashAlgorithm("SHA256");
 
                 return rsaFormatter.CreateSignature(hashOfDataToSign);
@@ -106,6 +106,7 @@ namespace Hybrid
             return stringWriter.ToString();
         }
 
+        
         //conversion of XML string to key
         public static RSAParameters convertStringToKey(string keyAsString)
         {
@@ -116,6 +117,6 @@ namespace Hybrid
             //get the object back from the stream
             return (RSAParameters)serializer.Deserialize(stringReader);
         }
-
+        
     }
 }
